@@ -48,35 +48,52 @@ def visualize_features(data):
         data: pandas DataFrame with features and Price
     """
     # TODO: Create a figure with 2x2 subplots, size (12, 10)
-    
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     # TODO: Add a main title: 'House Features vs Price'
-    
+    fig.suptitle('House Features vs Price', fontsize=16, fontweight='bold')
     # TODO: Plot 1 (top left): SquareFeet vs Price
     #       - scatter plot, color='blue', alpha=0.6
     #       - labels and title
     #       - grid
-    
+    axes[0, 0].scatter(data['SquareFeet'], data['Price'], color='blue', alpha=0.6)
+    axes[0, 0].set_xlabel('Square Feet')
+    axes[0, 0].set_ylabel('Price ($)')
+    axes[0, 0].set_title('Square Feet vs Price')
+    axes[0, 0].grid(True, alpha=0.3)
     # TODO: Plot 2 (top right): Bedrooms vs Price
     #       - scatter plot, color='green', alpha=0.6
     #       - labels and title
     #       - grid
-    
+    axes[0, 1].scatter(data['Bedrooms'], data['Price'], color='green', alpha=0.6)
+    axes[0, 1].set_xlabel('Bedrooms')
+    axes[0, 1].set_ylabel('Price ($)')
+    axes[0, 1].set_title('Bedrooms vs Price')
+    axes[0, 1].grid(True, alpha=0.3)
     # TODO: Plot 3 (bottom left): Bathrooms vs Price
     #       - scatter plot, color='red', alpha=0.6
     #       - labels and title
     #       - grid
-    
+    axes[1, 0].scatter(data['Bathrooms'], data['Price'], color='red', alpha=0.6)
+    axes[1, 0].set_xlabel('Bathrooms')
+    axes[1, 0].set_ylabel('Price ($)')
+    axes[1, 0].set_title('Bathrooms vs Price')
+    axes[1, 0].grid(True, alpha=0.3)
     # TODO: Plot 4 (bottom right): Age vs Price
     #       - scatter plot, color='orange', alpha=0.6
     #       - labels and title
     #       - grid
-    
+    axes[1, 1].scatter(data['Age'], data['Price'], color='orange', alpha=0.6)
+    axes[1, 1].set_xlabel('Age (years)')
+    axes[1, 1].set_ylabel('Price ($)')
+    axes[1, 1].set_title('Age vs Price')
+    axes[1, 1].grid(True, alpha=0.3)
     # TODO: Use plt.tight_layout() to make plots fit nicely
-    
+    plt.tight_layout()
     # TODO: Save the figure as 'feature_plots.png' with dpi=300
-    
+    plt.savefig('feature_plots.png', dpi=300, bbox_inches='tight')
+    print("\n Feature plots saved as 'feature_plots.png'")
     # TODO: Show the plot
-    pass
+    plt.show()
 
 
 def prepare_features(data):
@@ -145,16 +162,33 @@ def train_model(X_train, y_train, feature_names):
         trained LinearRegression model
     """
     # TODO: Create a LinearRegression model
-    
+    model = LinearRegression()
     # TODO: Train the model using fit()
-    
+    model.fit(X_train, y_train)
     # TODO: Print the intercept
-    
+    print(f"\n=== Model Training Complete ===")
+    print(f"Intercept: ${model.intercept_:.2f}")
+
     # TODO: Print each coefficient with its feature name
     #       Hint: use zip(feature_names, model.coef_)
-    
+    print(f"\nCoefficients:")
+    for name, coef in zip(feature_names, model.coef_):
+        print(f"  {name}: {coef:.2f}")
+
     # TODO: Print the full equation in readable format
-    
+    print(f"\nEquation:")
+    equation = f"Price = "
+    for i, (name, coef) in enumerate(zip(feature_names, model.coef_)):
+        if i == 0:
+            equation += f"{coef:.2f}*{name}"
+        else:
+            if coef >= 0:
+                equation += f" + {coef:.2f}*{name}"
+            else:
+                equation += f" + ({coef:.2f})*{name}"
+    equation += f" + {model.intercept_:.2f}"
+    print(equation)
+
     # TODO: Return the trained model
     pass
 
